@@ -9,19 +9,21 @@
  * };
  */
 class Solution {
-    private:
-    void InsertatBeg(ListNode* &head,int val){
-        ListNode* newnode=new ListNode(val);
-        newnode->next=head;
-        head=newnode;
-    }
 public:
     ListNode* reverseList(ListNode* head) {
-        ListNode* newhead=nullptr;
-        while(head!=nullptr){
-            InsertatBeg(newhead,head->val);
-            head=head->next;
+        if(head==nullptr || head->next==nullptr) return head;
+        stack<int> st;
+        ListNode* temp=head;
+        while(temp!=NULL){
+            st.push(temp->val);
+            temp=temp->next;
         }
-        return newhead;
+        temp=head;
+        while(temp!=nullptr){
+            temp->val=st.top();
+            st.pop();
+            temp=temp->next;
+        }
+        return head;
     }
 };
