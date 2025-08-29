@@ -2,38 +2,38 @@ class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
         vector<int> ans;
-        int row = matrix.size();
-        int col = matrix[0].size();
-        
-        int top = 0, bottom = row - 1;
-        int left = 0, right = col - 1;
-        
-        while (left <= right && top <= bottom) {
-            // Traverse from left to right
-            for (int i = left; i <= right; i++)
-                ans.push_back(matrix[top][i]);
-            top++;  // Move down
+        int n = matrix.size();
+        int m = matrix[0].size();
 
-            // Traverse from top to bottom
-            for (int i = top; i <= bottom; i++)
-                ans.push_back(matrix[i][right]);
-            right--;  // Move left
+        int srow = 0, erow = n - 1;
+        int scol = 0, ecol = m - 1;
 
-            // Traverse from right to left, if there are rows remaining
-            if (top <= bottom) {
-                for (int i = right; i >= left; i--)
-                    ans.push_back(matrix[bottom][i]);
-                bottom--;  // Move up
+        while (srow <= erow && scol <= ecol) {
+            for (int i = scol; i <= ecol; i++) {
+                ans.push_back(matrix[srow][i]);
+            }
+            srow++;
+
+            for (int j = srow; j <= erow; j++) {
+                ans.push_back(matrix[j][ecol]);
+            }
+            ecol--;
+
+            if (srow <= erow) {
+                for (int k = ecol; k >= scol; k--) {
+                    ans.push_back(matrix[erow][k]);
+                }
+                erow--;
             }
 
-            // Traverse from bottom to top, if there are columns remaining
-            if (left <= right) {
-                for (int i = bottom; i >= top; i--)
-                    ans.push_back(matrix[i][left]);
-                left++;  // Move right
+            if (scol <= ecol) {
+                for (int l = erow; l >= srow; l--) {
+                    ans.push_back(matrix[l][scol]);
+                }
+                scol++;
             }
         }
-        
+
         return ans;
     }
 };
