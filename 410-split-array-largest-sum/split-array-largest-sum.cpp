@@ -1,26 +1,40 @@
 class Solution {
 public:
-    int CountPartitions(vector<int> &a , int maxsum){
-        int partitons=1;
-        long long sum=0;
-        for(int i=0;i<a.size();i++){
-            if(sum+a[i]<=maxsum) sum+=a[i];
-            else{
-                partitons++;
-                sum=a[i];
+    bool isPossible(vector<int>& arr,int n,int k,int maxSum){
+        int sum = arr[0];
+        int nS = 1;
+        
+        for(int i =1 ;i<n;i++){
+            if (arr[i] > maxSum) return false;
+            if(sum + arr[i] <= maxSum){
+                sum += arr[i];
             }
+            else{
+                nS++;
+                sum = arr[i];
+            }
+            
+            if(nS > k) return false;
         }
-        return partitons;
+        return true;
     }
+
     int splitArray(vector<int>& nums, int k) {
-        int low=*max_element(nums.begin(),nums.end());
-        int high=accumulate(nums.begin(),nums.end(),0);
+        
+        int n = nums.size();
+        int low = *max_element(nums.begin(),nums.end());
+        int high = accumulate(nums.begin(),nums.end(),0);
+        int ans = -1;
+        if(n < k) return ans;
         while(low<=high){
-            int mid=low+(high-low)/2;
-            int part=CountPartitions(nums,mid);
-            if(part>k) low=mid+1;
-            else high=mid-1;
+            int mid = (low+high)/2;
+            
+            if(isPossible(nums,n,k,mid)){
+                ans = mid;
+                high = mid - 1;
+            }
+            else low = mid + 1; 
         }
-        return low;
+        return ans;
     }
 };
