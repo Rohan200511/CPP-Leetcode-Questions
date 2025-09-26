@@ -1,18 +1,15 @@
 class Solution {
 public:
-    bool isPalindrome(string s) {
-        int st = 0;
-        int e = s.length() - 1;
 
-        while(st < e){
-            if(!isalnum(s[st])) st++;
-            else if(!isalnum(s[e])) e--;
+    bool isPal(string &s , int st , int e){
+            if(st >= e) return true;
+            if(!isalnum(s[st])) return isPal(s,st+1,e);
+            else if(!isalnum(s[e])) return isPal(s,st,e-1);
             else if(tolower(s[st]) != tolower(s[e])) return false;
-            else{
-                st++;
-                e--;
-            }
-        }
-        return true;
+            return isPal(s,st+1,e-1);
+    }
+
+    bool isPalindrome(string s) {
+        return  isPal(s,0,s.length()-1);
     }
 };
