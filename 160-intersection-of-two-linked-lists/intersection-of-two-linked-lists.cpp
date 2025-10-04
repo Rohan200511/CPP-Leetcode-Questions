@@ -13,17 +13,14 @@ public:
         ListNode* temp1 = headA;
         ListNode* temp2 = headB;
 
-        unordered_set<ListNode*>st;
-        while(temp1!=nullptr){
-            st.insert(temp1);
-            temp1 = temp1->next;
-        }
+        while(temp1 != temp2){
+            if(temp1 == nullptr) temp1 = headB;
+            else temp1 = temp1->next;
 
-        while(temp2!=nullptr){
-
-            if(st.count(temp2)) return temp2;
-            temp2 = temp2->next;
+            if(temp2 == nullptr) temp2 = headA;
+            else temp2 = temp2->next;
         }
+        if(temp1 == temp2) return temp1;
         return nullptr;
     }
 };
