@@ -1,6 +1,6 @@
 <h2><a href="https://leetcode.com/problems/lru-cache">LRU Cache</a></h2> <img src='https://img.shields.io/badge/Difficulty-Medium-orange' alt='Difficulty: Medium' /><hr><p>Design a data structure that follows the constraints of a <strong><a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU" target="_blank">Least Recently Used (LRU) cache</a></strong>.</p>
 
-<p>Implement the <code>LRUCache</code> class:</p>
+<p>Implement the <code>LRUCache.</code> class:</p>
 
 <ul>
 	<li><code>LRUCache(int capacity)</code> Initialize the LRU cache with <strong>positive</strong> size <code>capacity</code>.</li>
