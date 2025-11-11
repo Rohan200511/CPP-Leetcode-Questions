@@ -63,8 +63,8 @@ Here’s how Heap Sort organizes and sorts the array step by step 👇
 
 ## 🧩 Related Implementations
 
-- [Min Heap Implementation](../MinHeap/README.md)
-- [Max Heap Implementation](../MaxHeap/README.md)
+- [Min Heap Implementation](https://github.com/Rohan200511/CPP-Leetcode-Questions/tree/6d3ba1c83ef7232d1b77d6eb2bf30f004f5171db/Heap%20Implementation%20in%20C%2B%2B/Min%20Heap%20Implementation)
+- [Max Heap Implementation](https://github.com/Rohan200511/CPP-Leetcode-Questions/tree/a9ececafac26ce5c2dd2bf0356034a0222aa8215/Heap%20Implementation%20in%20C%2B%2B/Max%20Heap%20Implementaion)
 
 ---
 
