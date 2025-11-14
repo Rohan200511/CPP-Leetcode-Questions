@@ -1,29 +1,38 @@
 class Solution {
 public:
     vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+        int n = nums1.size();
+        int m = nums2.size();
         vector<vector<int>>ans;
-        if(nums1.empty() || nums2.empty()) return ans;
-        priority_queue<pair<int,vector<int>>> pq;
+        priority_queue<
+                        pair<int , pair<int , int>> , 
+                        vector<pair<int , pair<int , int>>> , 
+                        greater<pair<int , pair<int , int>>>
+                       >pq;
+        set<pair<int,int>> seen;
 
-        for(int i = 0 ; i < nums1.size() ; i++){
-            for(int j = 0 ; j < nums2.size() ; j++){
-                int sum = nums1[i] + nums2[j];
+        pq.push({nums1[0] + nums2[0] , {0 , 0}});
+        seen.insert({0,0});
 
-                if(pq.size() < k) pq.push({sum , {nums1[i] , nums2[j]}});
+        while(k-- && !pq.empty()){
+            auto temp = pq.top();
+            pq.pop();
 
-                else if(sum < pq.top().first){
-                    pq.pop();
-                    pq.push({sum , {nums1[i] , nums2[j]}});
-                }
-                else break;
+            int i = temp.second.first;
+            int j = temp.second.second;
+
+            ans.push_back({nums1[i] , nums2[j]});
+
+            if( j+1 < m && seen.find({i , j+1}) == seen.end()){
+                pq.push({nums1[i] + nums2[j+1] , {i , j+1}});
+                seen.insert({i,j+1});
+            }
+
+            if( i+1 < n && seen.find({i+1 , j}) == seen.end()){
+                pq.push({nums1[i+1] + nums2[j] , {i+1 , j}});
+                seen.insert({i+1,j});
             }
         }
-
-        while(!pq.empty()){
-            ans.push_back(pq.top().second);
-            pq.pop();
-       }
-        reverse(ans.begin() , ans.end());
         return ans;
     }
 };
