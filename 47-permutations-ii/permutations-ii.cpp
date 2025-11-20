@@ -1,23 +1,25 @@
 class Solution {
 public:
-   void getPermutations(vector<int> &nums,int indx,vector<vector<int>> &ans){
-        if(indx == nums.size()){
+    void recurse(vector<int>& nums , int n , vector<vector<int>>& ans , int idx){
+        if(idx == n){
             ans.push_back(nums);
             return;
         }
-        unordered_set<int> seen;
-        for(int i = indx ; i< nums.size();i++){
-            if(seen.count(nums[i])) continue;
-            seen.insert(nums[i]);
-            swap(nums[indx] , nums[i]);
-            getPermutations(nums,indx+1,ans);
-            swap(nums[indx]  ,nums[i]);
+        unordered_set<int>st;
+
+        for(int i = idx ; i < n ; i++){
+            if(st.count(nums[i])) continue;
+            st.insert(nums[i]);
+            swap(nums[idx] , nums[i]);
+            recurse(nums,n,ans,idx+1);
+            swap(nums[idx] , nums[i]);
         }
     }
 
     vector<vector<int>> permuteUnique(vector<int>& nums) {
-        vector<vector<int>> ans;
-        getPermutations(nums,0,ans);
+        int n = nums.size();
+        vector<vector<int>>ans;
+        recurse(nums,n,ans,0);
         return ans;
     }
 };
