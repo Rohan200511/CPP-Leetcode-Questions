@@ -1,33 +1,34 @@
 class Solution {
-public:     
+public:
 
-    bool isPalindrome(string s , int start , int end){
-        while(start <= end){
-            if(s[start++] != s[end--]) return false;
+    bool isPalindrome(string s , int st , int end){
+        while(st < end){
+            if(s[st++] != s[end--]) return false;
         }
         return true;
     }
 
-    void helper(string s , int n , vector<vector<string>>& ans , vector<string>& curr , int index){
+    void recurse(string s  , int n , int index , vector<string>& curr , vector<vector<string>>& ans){
         if(index == n){
             ans.push_back(curr);
             return;
         }
 
-        for(int i = index ; i<n ; i++){
-            if(isPalindrome(s,index,i)){
-                curr.push_back(s.substr(index , i-index+1));
-                helper(s,n,ans,curr,i+1);
+
+        for(int i = index ; i < n ; i++){
+            if(isPalindrome(s , index , i)){
+                curr.push_back(s.substr(index , i - index + 1));
+                recurse(s , n , i + 1 , curr , ans);
                 curr.pop_back();
             }
         }
     }
-
+    
     vector<vector<string>> partition(string s) {
-        int n = s.length();
-        vector<vector<string>> ans;
+        if(s.empty()) return {};
+        vector<vector<string>>ans;
         vector<string>curr;
-        helper(s,n,ans,curr,0);
+        recurse(s , s.length() , 0 , curr , ans);
         return ans;
     }
 };
