@@ -1,26 +1,28 @@
 class Solution {
 public:
 
-    void lc(const string &digits,int index,string mp[],vector<string>& res,string &ans){
-        if(index == digits.size()){
-            res.push_back(ans);
+    void recurse(string digits , int n , vector<string>& ans , string& curr , string mp[] , int idx){
+        if(idx == n){
+            ans.push_back(curr);
             return;
         }
 
-        string letters = mp[digits[index]-'0'];
+        string letters = mp[digits[idx] - '0'];
+
         for(char c : letters){
-            ans+=c;
-            lc(digits,index+1,mp,res,ans);
-            ans.pop_back();
+            curr += c;
+            recurse(digits,n,ans,curr,mp,idx+1);
+            curr.pop_back();
         }
     }
 
     vector<string> letterCombinations(string digits) {
-        if(digits.empty()) return {};
-        string mp[10] = {" "," ","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
-        vector<string>res;
-        string ans;
-        lc(digits,0,mp,res,ans);
-        return res;
+        if(digits.length() == 0) return {};
+        int n = digits.length();
+        vector<string>ans;
+        string mp[10] = {" " , " " , "abc" , "def" , "ghi" , "jkl" , "mno" , "pqrs" , "tuv" , "wxyz"};
+        string curr;
+        recurse(digits , n , ans , curr , mp , 0);
+        return ans;
     }
 };
