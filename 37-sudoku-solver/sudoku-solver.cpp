@@ -1,49 +1,42 @@
 class Solution {
 public:
 
-    bool isSafe(vector<vector<char>>& board , int dig , int row,int col){
-        for(int j = 0;j < 9 ; j++){
-            if(board[row][j] == dig) return false;
+    bool isSafe(vector<vector<char>>& board , int row , int col , char digit){
+        for(int i = 0 ; i < 9 ; i++){
+            if (board[row][i] == digit || board[i][col] == digit) 
+                    return false;
         }
 
-        for(int k = 0; k < 9; k++){
-            if(board[k][col] == dig) return false;
-        }
+        int boxrow = row / 3 * 3;
+        int boxcol = col / 3 * 3;
 
-        int srow = row/3 * 3;
-        int scol = col/3 * 3;
-
-        for(int i = srow ; i <= srow+2 ;i++){
-            for(int j = scol ; j<= scol+2;j++){
-                if(board[i][j] == dig) return false;
+        for(int k = 0 ; k < 3 ; k++){
+            for(int l = 0 ; l < 3 ; l++){
+                if(board[boxrow + k][boxcol + l] == digit) return false;
             }
         }
         return true;
     }
 
-    bool helper(vector<vector<char>>& board , int row , int col){
-        if(row == 9) return true;
-
-        int nextrow = row;
-        int nextcol = col+1;
-        if(col == 9){
-            nextrow++;
-            nextcol = 0;
-        }
-
-        if(board[row][col] != '.') return helper(board,nextrow,nextcol);
-
-        for(char i = '1';i<='9';i++){
-            if(isSafe(board,i,row,col)){
-                board[row][col] = i;
-                if (helper(board,nextrow,nextcol)) return true;
-                board[row][col] = '.';
+    bool recurse(vector<vector<char>>& board){
+        for(int i = 0 ; i < 9 ; i++){
+            for(int j = 0 ; j < 9 ; j++){
+                if(board[i][j] == '.'){
+                    for(char c = '1' ; c <= '9' ; c++){
+                        if(isSafe(board , i , j ,c)){
+                            board[i][j] = c;
+                            if(recurse(board)) return true;
+                            board[i][j] = '.';
+                        }
+                    }
+                    return false;
+                }
             }
         }
-        return false;
+        return true;
     }
 
     void solveSudoku(vector<vector<char>>& board) {
-        helper(board, 0 ,0);
+        recurse(board);
     }
 };
