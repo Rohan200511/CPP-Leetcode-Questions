@@ -1,31 +1,33 @@
 class Solution {
 public:
 
-    bool isPossible(vector<vector<char>>& board , string word , int i , int j , int index , int rows , int cols){
-        if(index == word.length()) return true;
-        if(i < 0 || j < 0 || i >= rows || j >= cols) return false;
-        if(board[i][j] != word[index] || board[i][j] == '$') return false;
+    bool isPossible(vector<vector<char>>& board , int n , int m , string word , int idx , int i , int j){
+        if(idx == word.length()) return true;
+        if(i < 0 || i >= n || j < 0 || j >= m) return false;
+        if(board[i][j] != word[idx] || board[i][j] == '$') return false;
 
-        char c = board[i][j];
+        char original = board[i][j];
         board[i][j] = '$';
 
-        bool up = isPossible(board , word , i-1 , j ,index+1 , rows , cols);
-        bool down = isPossible(board , word , i+1 , j ,index+1 , rows , cols);
-        bool left = isPossible(board , word , i , j-1 ,index+1 , rows , cols);
-        bool right = isPossible(board , word , i , j+1 ,index+1 , rows , cols);
+        bool left = isPossible(board , n , m , word , idx + 1 , i-1 , j);
+        bool right = isPossible(board , n , m , word , idx + 1 , i+1 , j);
+        bool up = isPossible(board , n , m , word , idx + 1 , i , j-1);
+        bool down = isPossible(board , n , m , word , idx + 1 , i , j+1);
 
-        board[i][j] = c;
-        return up || down || left || right;
+        board[i][j] = original;
+
+        return up || right || down || left;
     }
 
     bool exist(vector<vector<char>>& board, string word) {
         int n = board.size();
         int m = board[0].size();
-        int index = 0;
+        int idx = 0;
+
         for(int i = 0 ; i < n ; i++){
             for(int j = 0 ; j < m ; j++){
-                if(board[i][j] == word[index]){
-                    if(isPossible(board , word , i , j , index , n , m)) return true;
+                if(board[i][j] == word[idx]){
+                    if(isPossible(board , n , m , word , idx , i , j)) return true;
                 }
             }
         }
