@@ -1,66 +1,53 @@
 class Solution {
 public:
-    vector<int>parent;
-    vector<int>rank;
-
-    int find(int x){
-
-        if(parent[x] == x) return x;
-
-        return parent[x] = find(parent[x]);
-    }
-
-    void unite(int x , int y){
-        int xP = find(x);
-        int yP = find(y);
-
-        if(xP == yP) return;
-        if(rank[xP] > rank[yP]) parent[yP] = xP;
-        else if(rank[xP] < rank[yP]) parent[xP] = yP;
-        else{
-            parent[yP] = xP;
-            rank[xP]++;
-        }
-    }
-    
-    int manhattan(vector<int> p1 , vector<int> p2){
-        return (abs(p1[0] - p2[0]) + abs(p1[1] - p2[1]));
-    }
-
     int minCostConnectPoints(vector<vector<int>>& points) {
-        int n = points.size();
-        parent.resize(n);
-        rank.assign(n , 0);
+        int V = points.size();
 
-        int minCost = 0;
+        vector<vector<pair<int , int>>>adj(V);
 
-        for(int i = 0 ; i < n ; i++){
-            parent[i] = i;
-        }
+        for(int i = 0 ; i < V ; i++){
+            for(int j = i + 1 ; j < V ; j++){
 
-        vector<vector<int>>edges;
+                int x1 = points[i][0];
+                int y1 = points[i][1];
 
-        for(int i = 0 ; i < n ; i++){
-            for(int j = i + 1 ; j < n ; j++){
+                int x2 = points[j][0];
+                int y2 = points[j][1];
 
-                int d = manhattan(points[i] , points[j]);
+                int d = (abs(x1 - x2) + abs(y1 - y2));
 
-                edges.push_back({i , j , d});
+                adj[i].push_back({j , d});
+                adj[j].push_back({i , d});
             }
         }
 
-        sort(edges.begin() , edges.end() , [&](auto& a , auto& b){
-            return a[2] < b[2];
-        });
+        vector<bool>vis(V , false);
 
-        for(auto& e : edges){
-            int a = e[0];
-            int b = e[1];
-            int dist = e[2];
+        priority_queue<pair<int,int> , vector<pair<int,int>> , greater<pair<int,int>>> pq;
 
-            if(find(a) != find(b)){
-                unite(a , b);
-                minCost += dist;
+        pq.push({0 , 0});
+
+        int minCost = 0;
+
+        while(pq.size()){
+            auto p = pq.top();
+            pq.pop();
+
+            int dist = p.first;
+            int node = p.second;
+
+            if(vis[node]) continue;
+
+            vis[node] = true;
+            minCost += dist;
+
+            for(auto& e : adj[node]){
+                int neigh = e.first;
+                int neigh_wt = e.second;
+
+                if(!vis[neigh]){
+                    pq.push({neigh_wt , neigh});
+                }
             }
         }
         return minCost;
