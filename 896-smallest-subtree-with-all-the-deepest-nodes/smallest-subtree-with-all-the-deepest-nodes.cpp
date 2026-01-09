@@ -11,50 +11,24 @@
  */
 class Solution {
 public:
+
+    pair<int , TreeNode*>solve(TreeNode* root){
+
+        if(root == nullptr) return {0 , NULL};
+
+        auto l = solve(root->left);
+        auto r = solve(root->right);
+
+        if(l.first == r.first){
+            return {l.first + 1 , root};
+        }
+        else if(l.first > r.first){
+            return {l.first+1 , l.second};
+        }
+        else return {r.first+1 , r.second};
+    }
+
     TreeNode* subtreeWithAllDeepest(TreeNode* root) {
-        if(!root) return nullptr;
-
-        unordered_map<TreeNode* , TreeNode*>parent;
-        queue<pair<TreeNode* , int>>q;
-
-        q.push({root , 0});
-        parent[root] = nullptr;
-
-        int maxLevel = 0;
-        vector<TreeNode*> deepest;
-
-        while(!q.empty()){
-            auto [node , level] = q.front();
-            q.pop();
-
-            if(level > maxLevel){
-                maxLevel = level;
-                deepest.clear();
-                deepest.push_back(node);
-            }
-            else if(level == maxLevel){
-                deepest.push_back(node);
-            }
-            if(node->left){
-                parent[node->left] = node;
-                q.push({node->left , level + 1});
-            }
-
-            if(node->right){
-                parent[node->right] = node;
-                q.push({node->right , level + 1});
-            }
-        }
-
-        while(deepest.size() > 1){
-            unordered_set<TreeNode*>s;
-
-            for (auto* node : deepest) {
-                s.insert(parent[node]);
-            }
-            deepest.assign(s.begin(), s.end());
-        }
-
-        return deepest[0];
+        return solve(root).second;
     }
 };
