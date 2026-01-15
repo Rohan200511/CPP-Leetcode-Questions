@@ -44,7 +44,7 @@ class Solution {
         
         while (!q.empty()) {
             int size = q.size();
-            diameter++;   // FIX 3: count levels, not nodes
+            diameter++;   
 
             for (int i = 0; i < size; i++) {
                 int v = q.front();
