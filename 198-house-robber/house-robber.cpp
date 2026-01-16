@@ -3,7 +3,7 @@ public:
     int rob(vector<int>& nums) {
         int n = nums.size();
 
-        //vector<int>t(n+1 , 0);
+        
 
         int prev2 = 0;
         int prev1 = nums[0];
