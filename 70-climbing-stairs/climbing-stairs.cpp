@@ -1,16 +1,17 @@
 class Solution {
 public:
-    int t[46];
-    Solution(){
-        memset(t , -1 , sizeof(t));
-    }
-
     int climbStairs(int n) {
-        if(n < 0) return 0;
-        if(n == 0) return 1;
+        if(n <= 2) return n;
 
-        if(t[n] != -1) return t[n];
+        int a = 1;
+        int b = 2;
+        int c;
+        for(int i = 3 ; i <= n ; i++){
+            c = a + b;
+            a = b;
+            b = c;
+        }
 
-        return t[n] = climbStairs(n - 1) + climbStairs(n - 2);
+        return c;
     }
 };
