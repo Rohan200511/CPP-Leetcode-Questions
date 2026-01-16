@@ -4,34 +4,34 @@ public:
         int n = nums.size();
 
         if(n == 1) return nums[0];
-
-        vector<int>t(n+1 , 0);
         
-        t[0] = 0;
-
+        int prev2 = 0;
+        int prev1 = 0;
         for(int i = 1 ; i <= n-1 ; i++){
-            int take = nums[i-1] + ((i-2 >= 0) ? t[i-2] : 0);
-            int skip = t[i-1];
+            int take = nums[i-1] + ((i-2 >= 0) ? prev2 : 0);
+            int skip = prev1;
 
-            t[i] = max(take , skip);
+            int temp = max(take , skip);
+            prev2 = prev1;
+            prev1 = temp;
         }
 
-        int result1 = t[n-1];
-
-        t.assign(n+1 , 0);
+        int result1 = prev1;
 
 
-        t[0] = 0;
-        t[1] = 0;
+        prev2 = 0;
+        prev1 = 0;
 
         for(int i = 2 ; i <= n ; i++){
-            int take = nums[i-1] + ((i-2 >= 0) ? t[i-2] : 0);
-            int skip = t[i-1];
+            int take = nums[i-1] + ((i-2 >= 0) ? prev2 : 0);
+            int skip = prev1;
 
-            t[i] = max(take , skip);
+            int temp = max(take , skip);
+            prev2 = prev1;
+            prev1 = temp;
         }
 
-        int result2 = t[n];
+        int result2 = prev1;
 
         return max(result1 , result2);
 
