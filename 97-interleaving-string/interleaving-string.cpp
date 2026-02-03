@@ -1,22 +1,22 @@
 class Solution {
 public:
     int m , n , N;
-    int t[101][101][201];
+    int t[101][101];
 
-    bool solve(int i , int j , int k , string& s1 , string& s2 , string& s3){
-        if(i == m && j == n && k == N) return true;
-        if(k >= N) return false;
+    bool solve(int i , int j , string& s1 , string& s2 , string& s3){
+        if(i == m && j == n && i+j == N) return true;
+        if(i+j >= N) return false;
 
         bool result = false;
 
-        if(t[i][j][k] != -1) return result;
+        if(t[i][j] != -1) return result;
 
-        if(s1[i] == s3[k]) result = solve(i+1 , j , k+1 , s1 , s2 , s3);
-        if(result) return t[i][j][k] = result;
+        if(s1[i] == s3[i+j]) result = solve(i+1 , j , s1 , s2 , s3);
+        if(result) return t[i][j]= result;
 
-        if(s2[j] == s3[k]) result = solve(i , j+1 , k+1 , s1 , s2, s3);
+        if(s2[j] == s3[i+j]) result = solve(i , j+1 , s1 , s2, s3);
 
-        return t[i][j][k] = result;
+        return t[i][j] = result;
     }
 
     bool isInterleave(string s1, string s2, string s3) {
@@ -28,6 +28,6 @@ public:
 
         memset(t , -1 , sizeof(t));
 
-        return solve(0 , 0 , 0 , s1 , s2 , s3);
+        return solve(0 , 0 , s1 , s2 , s3);
     }
 };
