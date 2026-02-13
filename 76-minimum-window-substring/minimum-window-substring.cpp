@@ -10,6 +10,7 @@ public:
         int countReqd = t.length();
 
         unordered_map<char,int>mp;
+
         for(auto it : t){
             mp[it]++;
         }
@@ -21,6 +22,7 @@ public:
                 countReqd--;
             }
             mp[s[j]]--;
+            
 
             while(countReqd == 0){
 
