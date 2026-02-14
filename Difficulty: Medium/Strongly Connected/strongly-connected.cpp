@@ -1,64 +1,58 @@
 //Position this line where user code will be pasted.
 class Solution {
   public:
-  
-    void dfsFill(int u , vector<vector<int>> &adj , stack<int>& st , vector<bool>& visited){
-        visited[u] = true;
+     
+    void dfsOrder(int u , vector<vector<int>> &adj , vector<bool>& vis , stack<int>& st){
+        vis[u] = true;
         
-        for(int v : adj[u]){
-            if(!visited[v]){
-                dfsFill(v , adj , st , visited);
-            }
+        for(auto& v : adj[u]){
+            if(!vis[v]) dfsOrder(v , adj , vis , st);
         }
+        
         st.push(u);
     }
     
-    
-    void dfs(int u , vector<vector<int>>& revAdj , vector<bool>& visited){
-        visited[u] = true;
+    void dfs(int u , vector<vector<int>> &revAdj , vector<bool>& vis){
+        vis[u] = true;
         
-        for(int v : revAdj[u]){
-            if(!visited[v]){
-                dfs(v , revAdj , visited);
-            }
+        for(auto& v : revAdj[u]){
+            if(!vis[v]) dfs(v , revAdj , vis);
         }
     }
-  
+    
     int kosaraju(vector<vector<int>> &adj) {
         // code here
         int V = adj.size();
         
         stack<int>st;
-        vector<bool>visited(V , false);
+        
+        vector<bool>vis(V , false);
         
         for(int i = 0 ; i < V ; i++){
-            if(!visited[i]){
-                dfsFill(i , adj , st , visited);
-            }
+            if(!vis[i]) dfsOrder(i , adj , vis , st);
         }
         
         vector<vector<int>> revAdj(V);
         
-        for(int i = 0 ; i < V ; i++){
-            for(int v : adj[i]){
-                revAdj[v].push_back(i);
+        for(int u = 0 ; u < V ; u++){
+            for(auto& v : adj[u]){
+                revAdj[v].push_back(u);
             }
         }
         
-         
-        int components = 0;
-        
-        visited.assign(V , false);
+        vis.assign(V , false);
+        int count = 0;
         
         while(!st.empty()){
-            int node = st.top();
+            auto node = st.top();
             st.pop();
             
-            if(!visited[node]){
-                dfs(node , revAdj , visited);
-                components++;
-            }
+            if(!vis[node]){
+                dfs(node , revAdj , vis);
+                count++;
+            } 
         }
-        return components;
+        
+        return count;
     }
 };
