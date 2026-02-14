@@ -5,7 +5,7 @@ public:
 
         t[0][0] = poured;
 
-        for(int i = 1 ; i <= 100 ; i++){
+        for(int i = 1 ; i <= query_row ; i++){
             for(int j = 0 ; j <= i ; j++){
                 double left_up = max(0.0 , (j - 1 >= 0) ? (t[i-1][j-1] - 1.0) / 2.0 : 0.0);
                 double right_up = max(0.0 , (j < i) ? (t[i-1][j] - 1.0) / 2.0 : 0.0);
