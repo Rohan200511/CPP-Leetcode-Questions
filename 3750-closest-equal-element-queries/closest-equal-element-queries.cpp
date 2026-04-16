@@ -1,7 +1,7 @@
 class Solution {
 public:
 
-    int getPos(vector<int>& temp , int target){
+    /*int getPos(vector<int>& temp , int target){
         int l = 0 , r = temp.size() - 1;
 
         while(l <= r){
@@ -12,7 +12,7 @@ public:
             else r = mid - 1;
         }
         return -1;
-    }
+    }*/
 
     vector<int> solveQueries(vector<int>& nums, vector<int>& queries) {
 
@@ -38,7 +38,9 @@ public:
 
             int m = temp.size();
 
-            int pos = getPos(temp , curr_idx);
+            //int pos = getPos(temp , curr_idx);
+
+            int pos = lower_bound(temp.begin() , temp.end() , curr_idx) - temp.begin();
 
             int prev = temp[(pos - 1 + m) % m];
             int next = temp[(pos + 1) % m];
