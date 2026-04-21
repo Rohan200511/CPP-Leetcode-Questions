@@ -30,15 +30,15 @@ public:
         int n = source.size();
 
         parent.resize(n);
-        rank.resize(n);
+        rank.resize(n , 0);
 
         for(int i = 0 ; i < n ; i++) parent[i] = i;
 
         for(auto& it : allowedSwaps){
-            int xP = find(it[0]);
-            int yP = find(it[1]);
+            int x = it[0];
+            int y = it[1];
 
-            unite(xP , yP);
+            unite(x , y);
         }
 
         unordered_map<int , unordered_map<int,int>>componentsElements;
