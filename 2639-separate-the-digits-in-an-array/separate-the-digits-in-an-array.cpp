@@ -3,12 +3,11 @@ public:
     vector<int> separateDigits(vector<int>& nums) {
         vector<int> ans;
 
-        for(int i = nums.size() - 1; i >= 0; i--) {
-            int num = nums[i];
+        for(int x : nums) {
+            string s = to_string(x);
 
-            while(num > 0) {
-                ans.insert(ans.begin(), num % 10);
-                num /= 10;
+            for(char c : s) {
+                ans.push_back(c - '0');
             }
         }
 
