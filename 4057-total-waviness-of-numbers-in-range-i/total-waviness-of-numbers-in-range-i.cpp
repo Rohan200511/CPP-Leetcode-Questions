@@ -9,8 +9,7 @@ public:
             if((int)num.length() < 3) continue;
 
             for(int j = 1 ; j < (int)num.size() - 1 ; j++){
-                if(num[j] > num[j-1] && num[j] > num[j+1]) ans++;
-                else if(num[j] < num[j-1] && num[j] < num[j+1]) ans++;
+                if((num[j] > num[j - 1] && num[j] > num[j + 1]) || (num[j] < num[j - 1] && num[j] < num[j + 1])) ans++;
             }
         }
 
