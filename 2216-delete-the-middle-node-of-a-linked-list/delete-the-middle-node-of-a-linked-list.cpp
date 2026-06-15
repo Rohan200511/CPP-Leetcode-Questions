@@ -15,23 +15,23 @@ public:
             return nullptr;
         }
 
-    ListNode* slow = head;
-    ListNode* fast = head;
-    ListNode* prev = nullptr;
-
-   
-    while (fast != nullptr && fast->next != nullptr) {
-        prev = slow; 
-        slow = slow->next; 
-        fast = fast->next->next; 
-    }
+        ListNode* slow = head;
+        ListNode* fast = head;
+        ListNode* prev = nullptr;
 
     
-    if (prev != nullptr) {
-        prev->next = slow->next; 
-    delete slow;
-    } 
+        while (fast != nullptr && fast->next != nullptr) {
+            prev = slow; 
+            slow = slow->next; 
+            fast = fast->next->next; 
+        }
 
-    return head;
+        
+        if (prev != nullptr) {
+            prev->next = slow->next; 
+        delete slow;
+        } 
+
+        return head;
     }
 };
