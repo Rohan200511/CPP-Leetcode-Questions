@@ -1,48 +1,32 @@
 class Solution {
 public:
-
-    vector<int>parent , rank;
-    
-    int find(int u){
-        if(parent[u] == u) return u;
-
-        return parent[u] = find(parent[u]);
-    }
-
-    void unite(int u , int v){
-        int uP = find(u);
-        int vP = find(v);
-
-        if (uP == vP) return;
-
-        if(rank[uP] < rank[vP]){
-            parent[uP] = vP; 
-        }
-        else if(rank[uP] > rank[vP]) parent[vP] = uP;
-
-        else{
-            rank[uP]++;
-            parent[vP] = uP;
-        }
-    }
-
     int minScore(int n, vector<vector<int>>& roads) {
-        parent.resize(n+1);
-        rank.resize(n+1 , 0);
+        unordered_map<int , vector<pair<int , int>>>adj;
 
-        for(int i = 0 ; i <= n ; i++) parent[i] = i;
-
-        for(auto& r : roads){
-            unite(r[0] , r[1]);
+        for(auto& road : roads){
+            adj[road[0]].push_back({road[1] , road[2]});
+            adj[road[1]].push_back({road[0] , road[2]});
         }
-
-        int source = find(1);
 
         int ans = 1e5;
+        vector<bool>vis(n+1 , false);
 
-        for (auto &road : roads) {
-            if (find(road[0]) == source)
-                ans = min(ans, road[2]);
+        queue<int>q;
+        q.push(1);
+        vis[1] = true;
+
+        while(!q.empty()){
+            int u = q.front();
+            q.pop();
+
+            for(auto& [v , w] : adj[u]){
+                ans = min(ans , w);
+                
+                if(!vis[v]){
+                    vis[v] = true;
+                    q.push(v);
+                }
+            }
         }
         return ans;
     }
