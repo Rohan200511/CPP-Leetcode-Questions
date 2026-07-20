@@ -1,38 +1,37 @@
 class Solution {
 public:
+
     int n , m;
-    vector<vector<int>>directions = {{ 1 , 0} , {0 , 1} , {-1 , 0} , {0 , -1}};
-    vector<vector<int>>vis;
+    vector<vector<int>>dp;
 
-    int dfs(vector<vector<int>>& matrix , int i , int j){
+    int solve(vector<vector<int>>& matrix , int i , int j , int prev){
+        if(i >= n || i < 0 || j >= m || j < 0) return 0;
 
-        if(vis[i][j] != -1) return vis[i][j];
+        if(matrix[i][j] <= prev) return 0;
 
-        int len = 1;
+        if(dp[i][j] != -1) return dp[i][j];
 
-        for(auto& dir : directions){
-            int nr = i + dir[0];
-            int nc = j + dir[1];
+        int down = solve(matrix , i + 1 , j , matrix[i][j]);
+        int right = solve(matrix , i , j + 1 , matrix[i][j]);
+        int up = solve(matrix , i - 1 , j , matrix[i][j]);
+        int left = solve(matrix , i , j - 1, matrix[i][j]);
 
-            if(nr >= 0 && nr < n && nc >= 0 && nc < m && matrix[i][j] < matrix[nr][nc])
-                len = max(len , 1 + dfs(matrix , nr , nc));
-        }
-        return vis[i][j] = len;
+        return dp[i][j] = 1 + max({down , right , up , left});
     }
 
     int longestIncreasingPath(vector<vector<int>>& matrix) {
         n = matrix.size();
         m = matrix[0].size();
 
-        vis.assign(n , vector<int>(m , -1));
+        dp.assign(n , vector<int>(m , -1));
+
         int ans = 0;
 
         for(int i = 0 ; i < n ; i++){
             for(int j = 0 ; j < m ; j++){
-                ans = max(ans , dfs(matrix , i ,j));
+                ans = max(ans , solve(matrix , i , j , INT_MIN));
             }
         }
-
         return ans;
     }
 };
