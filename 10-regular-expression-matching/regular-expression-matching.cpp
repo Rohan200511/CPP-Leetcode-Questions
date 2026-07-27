@@ -1,32 +1,34 @@
 class Solution {
 public:
-    int t[21][21];
 
-    bool solve(int i, int j, string& text, string& pattern) {
-        if (j == pattern.length())
-            return i == text.length();
-            
-        if (t[i][j] != -1) {
-            return t[i][j];
-        }
-        
-        bool ans = false;
+    int n , m;
 
-        bool first_match = (i < text.length() && (pattern[j] == text[i] || pattern[j] == '.'));
+    vector<vector<int>>dp;
 
-        if (j + 1 < pattern.length() && pattern[j + 1] == '*') {
-            ans = (solve(i, j + 2, text, pattern) || (first_match && solve(i + 1, j, text, pattern)));
+    bool solve(string& s , string& p , int i , int j){
+        if (j == m)
+            return i == n;
+
+        if(dp[i][j] != -1) return dp[i][j];
+
+        bool firstMatch = (i < n) && ((s[i] == p[j]) || p[j] == '.');
+
+        if(j + 1 < m && p[j + 1] == '*'){
+            bool skip = solve(s , p , i , j + 2);
+            bool consume = firstMatch && solve(s , p , i + 1 , j);
+
+            return dp[i][j] = skip || consume;
         } 
-        
-        else {
-            ans = first_match && solve(i + 1, j + 1, text, pattern);
-        }
 
-        return t[i][j] = ans;
-    }
-    
-    bool isMatch(string text, string pattern) {
-        memset(t, -1, sizeof(t));
-        return solve(0, 0, text, pattern);
+        return dp[i][j] = firstMatch && solve(s , p , i + 1 , j + 1);
+    }    
+
+    bool isMatch(string s, string p) {
+        n = s.length();
+        m = p.length();
+
+        dp.assign(n + 1 , vector<int>(m + 1 , -1));
+
+        return solve(s , p , 0 , 0);
     }
 };
