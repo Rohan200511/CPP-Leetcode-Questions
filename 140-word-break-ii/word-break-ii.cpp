@@ -1,47 +1,37 @@
 class Solution {
 public:
-
     int n;
     unordered_set<string>st;
+    vector<string>ans;
 
-    void solve(int i , string& s , vector<string>& result , string& currSentence){
-
-        if(i >= s.length()) {
-            result.push_back(currSentence);
+    void solve(string& s , string curr , int i){
+        if(i >= n){
+            ans.push_back(curr);
             return;
         }
 
         for(int j = i ; j < n ; j++){
+            string ori = curr;
+            string temp = s.substr(i , j - i + 1);
 
-            string tempWord = s.substr(i, j-i+1);
+            if(st.count(temp)){
+                if(!curr.empty()) curr += " ";
 
-            if(st.find(tempWord) != st.end()) {
-                string origSentence = currSentence;
-                if(!currSentence.empty())
-                    currSentence += " ";
-                
-                currSentence += tempWord;
-
-                solve(j+1, s , result , currSentence);
-
-                currSentence = origSentence;
-                
+                curr += temp;
+                solve(s , curr , j + 1);
             }
+            curr = ori;
         }
     }
 
     vector<string> wordBreak(string s, vector<string>& wordDict) {
         n = s.length();
 
-        for(string word : wordDict){
-            st.insert(word);
-        }
+        for(string& word : wordDict) st.insert(word);
 
-        vector<string>ans;
+        string curr = "";
 
-        string currSentence = "";
-
-        solve(0 , s , ans , currSentence);
+        solve(s , curr , 0);
 
         return ans;
     }
