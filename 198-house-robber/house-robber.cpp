@@ -1,22 +1,26 @@
 class Solution {
-public:
+public: 
+
+    int n;
+    
+    vector<int>dp;
+
+    int solve(vector<int>& nums , int i){
+        if(i >= n) return 0;
+
+        if(dp[i] != -1) return dp[i];
+
+       int take = nums[i] + solve(nums , i + 2);
+       int skip = solve(nums , i + 1);
+
+       return dp[i] = max(take , skip); 
+    }
+
     int rob(vector<int>& nums) {
-        int n = nums.size();
+        n = nums.size();
 
-        
+        dp.assign(n + 1 , -1);
 
-        int prev2 = 0;
-        int prev1 = nums[0];
-
-        for(int i = 2 ; i <= n ; i++){
-
-            int steal = nums[i-1] + prev2;
-            int skip = prev1;
-
-            int temp = max(steal , skip);
-            prev2 = prev1;
-            prev1 = temp;
-        }
-        return prev1;
+        return solve(nums , 0);
     }
 };
