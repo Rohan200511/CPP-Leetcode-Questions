@@ -1,29 +1,24 @@
 class Solution {
 public:
+    vector<vector<int>> dp;
 
-    int n;
+    int solve(vector<int>& piles, int i, int j) {
+        if (i == j)
+            return piles[i];
 
-    bool solve(vector<int>& piles , int i , int j , int A , int B , bool turn){
+        if (dp[i][j] != -1)
+            return dp[i][j];
 
-        if(i > j){
-            return A >= B;
-        }
+        int takeLeft = piles[i] - solve(piles, i + 1, j);
+        int takeRight = piles[j] - solve(piles, i, j - 1);
 
-        if(turn){
-            return solve(piles , i + 1 , j , A + piles[i] , B , !turn) ||
-                    solve(piles , i , j - 1 , A + piles[j] , B , !turn);
-        }
-
-        else{
-            return solve(piles , i + 1 , j , B + piles[i] , B , !turn) ||
-                    solve(piles , i , j - 1 , B + piles[j] , B , !turn);
-        }
-
+        return dp[i][j] = max(takeLeft, takeRight);
     }
 
     bool stoneGame(vector<int>& piles) {
-        n = piles.size();
+        int n = piles.size();
+        dp.assign(n, vector<int>(n, -1));
 
-        return solve(piles , 0 , n - 1 , 0 , 0 , true);
+        return solve(piles, 0, n - 1) > 0;
     }
 };
