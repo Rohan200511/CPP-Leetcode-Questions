@@ -8,12 +8,10 @@ public:
         
         if(dp[n] != -1) return dp[n];
 
-        bool take = false;
-
         for(int i = 1 ; i * i <= n ; i++){
             int sq = i * i;
 
-            take = solve(n - sq);
+            bool take = solve(n - sq);
 
             if(take == false) return dp[n] = true;
         }
