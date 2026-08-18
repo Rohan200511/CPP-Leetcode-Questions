@@ -1,27 +1,39 @@
 class Solution {
 public:
 
-    long long int findCost(vector<int>& nums , vector<int>& cost , int tomake){
-        long long totalCost = 0;
+    long long totalCost(vector<int>& nums, vector<int>& cost , int target){
+        
+        long long costt = 0;
 
-        for(int i = 0; i < nums.size(); i++){
-            totalCost += llabs(tomake - nums[i]) * cost[i];
+        for(int i = 0 ; i < nums.size() ; i++){
+            costt += llabs(nums[i] - target) * cost[i];
         }
-        return totalCost;
+
+        return costt;
+
     }
 
     long long minCost(vector<int>& nums, vector<int>& cost) {
-        long long low = *min_element(nums.begin() , nums.end());
-        long long high = *max_element(nums.begin() , nums.end());
-        while(low < high){
-            long long mid = low + ((high - low) / 2);
+        long long left = *min_element(nums.begin() , nums.end());
+        long long right = *max_element(nums.begin() , nums.end());
 
-            long long c1 = findCost(nums , cost , mid);
-            long long c2 = findCost(nums , cost , mid+1);
+        long long ans = LLONG_MAX;
 
-            if(c1 < c2) high = mid;
-            else low = mid + 1;
+        while(left <= right){
+            long long mid = left + (right - left) / 2;
+
+            long long cost1 = totalCost(nums , cost , mid);
+            long long cost2 = totalCost(nums , cost , mid - 1);
+
+            ans = min({ans , cost1 , cost2});
+
+            if(cost1 < cost2){
+                left = mid + 1;
+            }
+            else right = mid - 1;
+
         }
-        return findCost(nums, cost, low);;
+
+        return (ans == LLONG_MAX) ? 0 : ans;
     }
 };
