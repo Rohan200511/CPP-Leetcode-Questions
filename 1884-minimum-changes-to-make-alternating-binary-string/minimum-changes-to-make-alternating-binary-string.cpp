@@ -1,30 +1,54 @@
 class Solution {
 public:
     int minOperations(string s) {
-        int n = s.size();
-        string pat1, pat2;
-        bool one = false;
+        int n = s.length();
 
-        for(int i = 0; i < n; i++){
-            if(one) pat1.push_back('1');
-            else pat1.push_back('0');
-            one = !one;
+        string s1 = s;
+        string s2 = s;
+
+        int count1 = 0;
+        int count2 = 0;
+
+        if(s1[0] == '1'){
+            s1[0] = '0';
+            count1++;
         }
 
-        one = true;
-        for(int i = 0; i < n; i++){
-            if(one) pat2.push_back('1');
-            else pat2.push_back('0');
-            one = !one;
+        if(s2[0] == '0'){
+            s2[0] = '1';
+            count2++;
         }
 
-        int cnt1 = 0, cnt2 = 0;
-
-        for(int i = 0; i < n; i++){
-            if(s[i] != pat1[i]) cnt1++;
-            if(s[i] != pat2[i]) cnt2++;
+        for(int i = 1; i < n; i++){
+            if(s1[i-1] == '1'){
+                if(s1[i] == '1'){
+                    s1[i] = '0';
+                    count1++;
+                }
+            }
+            else{
+                if(s1[i] == '0'){
+                    s1[i] = '1';
+                    count1++;
+                }
+            }
         }
 
-        return min(cnt1, cnt2);
+        for(int i = 1; i < n; i++){
+            if(s2[i-1] == '1'){
+                if(s2[i] == '1'){
+                    s2[i] = '0';
+                    count2++;
+                }
+            }
+            else{
+                if(s2[i] == '0'){
+                    s2[i] = '1';
+                    count2++;
+                }
+            }
+        }
+
+        return min(count1, count2);
     }
 };
