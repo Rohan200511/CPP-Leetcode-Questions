@@ -23,7 +23,7 @@ public:
         int len = 1;
 
         for(int i = 0 ; i < n ; i++){
-            for(int j = 1 ; j < n ; j++){
+            for(int j = i ; j < n ; j++){
                 if(dp[i][j] && j - i + 1 > len){
                     ind = i;
                     len = j - i + 1;
