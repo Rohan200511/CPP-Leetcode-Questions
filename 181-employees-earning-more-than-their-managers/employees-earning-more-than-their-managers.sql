@@ -1,8 +1,14 @@
 # Write your MySQL query statement below
-SELECT e1.name AS Employee
-FROM Employee e1
-WHERE salary > (
+/*SELECT e.name AS Employee
+FROM Employee e
+JOIN Employee m
+ON e.managerId = m.id
+WHERE e.salary > m.salary;*/
+
+SELECT e.name AS Employee
+FROM Employee e
+WHERE e.salary > (
     SELECT salary
-    FROM Employee e2
-    WHERE e2.id = e1.managerId
-);
+    FROM Employee m
+    WHERE e.managerId = m.id
+)
