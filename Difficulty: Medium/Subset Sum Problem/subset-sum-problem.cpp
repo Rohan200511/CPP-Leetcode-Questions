@@ -1,24 +1,30 @@
 class Solution {
-  public:   
+  public:
     
-    bool recurse(vector<int>& arr , int sum , vector<vector<int>>& memo , int n){
+    int n;
+    
+    vector<vector<int>>dp;
+    
+    int solve(vector<int>& arr , int sum , int i){
         if(sum == 0) return 1;
+        if(i >= n) return sum == 0;
+        if(sum < 0) return 0;
+        if(dp[i][sum] != -1) return dp[i][sum];
+        int skip = solve(arr , sum , i + 1);
+        int take = 0;
         
-        if(n <= 0) return 0;
+        if(arr[i] <= sum){
+            take = solve(arr , sum - arr[i] , i + 1);
+        }
         
-        if(memo[n][sum] != -1) return memo[n][sum];
-        
-        if(arr[n-1] > sum) return memo[n][sum] = recurse(arr , sum , memo, n-1);
-        
-        else return memo[n][sum] = recurse(arr,sum,memo,n-1) || recurse(arr,sum-arr[n-1],memo,n-1);
+        return dp[i][sum] = take || skip;
     }
+        
     
     bool isSubsetSum(vector<int>& arr, int sum) {
         // code here
-        int n = arr.size();
-        
-        vector<vector<int>>memo(n+1 , vector<int>(sum+1 , -1));
-        
-        return recurse(arr , sum , memo , n);
+        n = arr.size();
+        dp.assign(n , vector<int>(sum + 1 , -1));
+        return solve(arr , sum , 0);
     }
 };
