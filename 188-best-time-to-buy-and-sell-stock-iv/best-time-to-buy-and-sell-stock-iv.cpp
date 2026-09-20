@@ -1,30 +1,30 @@
 class Solution {
 public:
+
     int n;
-    vector<vector<vector<int>>>t;
 
-    int solve(int i , int k , int hold , vector<int>& prices){
-        if(i == n || k == 0) return 0;
+    vector<vector<vector<int>>>dp;
 
-        if(t[i][k][hold] != -1) return t[i][k][hold];
-
-        int ans;
-
-        if(hold == 0){
-            ans = max(solve(i + 1 , k , hold , prices) , 
-                        -prices[i] + solve(i + 1 , k , 1 , prices));
+    int solve(vector<int>& prices , int i , bool buy , int k){
+        if(i >= n || k == 0) return 0;
+        if(dp[i][buy][k] != -1e9) return dp[i][buy][k];
+        if(buy){
+            return dp[i][buy][k] = max(
+                solve(prices , i + 1 , buy , k) , 
+                -prices[i] + solve(prices , i + 1 , !buy , k)
+            );
         }
-
-        if(hold == 1){
-            ans = max(solve(i + 1 , k , hold , prices) , 
-                        prices[i] + solve(i + 1 , k - 1 , 0 , prices));
+        else{
+            return dp[i][buy][k] = max(
+                solve(prices , i + 1 , buy , k),
+                prices[i] + solve(prices , i + 1 , !buy , k - 1)
+            );
         }
-        return t[i][k][hold] = ans;
     }
 
     int maxProfit(int k, vector<int>& prices) {
         n = prices.size();
-        t.assign(n + 1 , vector<vector<int>>(k + 1 , vector<int>(2 , -1)));              
-        return solve(0 , k , 0 , prices);
+        dp.assign(n , vector<vector<int>>(2 , vector<int>(k + 1 ,  -1e9)));
+        return solve(prices , 0 , true , k);
     }
 };
