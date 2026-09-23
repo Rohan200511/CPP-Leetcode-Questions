@@ -1,27 +1,19 @@
 class Solution {
 public:
-    int n;
-    long long t[2501][2501];
-
-    long long solve(vector<int>& nums , int n , int i , int prev){
-        if(i >= n) return 0;
-
-        if(prev != -1 && t[i][prev] != -1) return t[i][prev];
-
-        long long take = 0;
-        if(prev == -1 || nums[i] > nums[prev])
-            take = 1 + solve(nums , n , i + 1 , i);
-
-        long long skip = solve(nums , n , i + 1 , prev);
-        
-        if(prev != -1) t[i][prev] = max(take , skip);
-
-        return max(take , skip); 
-    }
-
     int lengthOfLIS(vector<int>& nums) {
-        n = nums.size();
-        memset(t , -1 , sizeof(t));
-        return solve(nums , n , 0 , -1);
+        int n = nums.size();
+
+        vector<int>dp(n , 1);
+        int ans = 1;
+
+        for(int i = 0 ; i < n ; i++){
+            for(int j = 0 ; j < i ; j++){
+                if(nums[j] < nums[i]){
+                    dp[i] = max(dp[i] , dp[j] + 1);
+                    ans = max(ans , dp[i]);
+                }
+            }
+        }
+        return ans;
     }
 };
