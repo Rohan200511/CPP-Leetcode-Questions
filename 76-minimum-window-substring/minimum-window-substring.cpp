@@ -2,40 +2,37 @@ class Solution {
 public:
     string minWindow(string s, string t) {
         int n = s.length();
-        if(t.length() > n) return "";
+        int m = t.length();
 
-        int i = 0;
-        int j = 0;
-        int minWindowsize = INT_MAX;
-        int countReqd = t.length();
+        if(m == 0) return "";
+        if(m > n) return "";
 
-        unordered_map<char,int>mp;
+        unordered_map<char , int>mp;
+        int reqd = m;
+        int minWind = INT_MAX;
+        int start_i = -1;
 
-        for(auto it : t){
-            mp[it]++;
-        }
+        for(char c : t) mp[c]++;
 
-        int start_i = 0;
+        int l = 0;
+        for(int r = 0 ; r < n ; r++){
+            if(mp[s[r]] > 0) reqd--;
 
-        while(j < n){
-            if(mp[s[j]] > 0){
-                countReqd--;
-            }
-            mp[s[j]]--;
-            
+            mp[s[r]]--;
 
-            while(countReqd == 0){
-
-                if(minWindowsize > j-i+1){
-                    minWindowsize = j-i+1;
-                    start_i = i;
+            while(reqd == 0){
+                if(minWind > r - l + 1){
+                    minWind = r - l + 1;
+                    start_i = l;
                 }
-                mp[s[i]]++;
-                if(mp[s[i]] > 0) countReqd++;
-                i++;
+
+                mp[s[l]]++;
+                if(mp[s[l]] > 0) reqd++;
+                l++;
             }
-            j++;
         }
-        return (minWindowsize == INT_MAX) ? "" : s.substr(start_i , minWindowsize);
+
+        if(minWind == INT_MAX) return ""; 
+        return s.substr(start_i , minWind);
     }
 };
