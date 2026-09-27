@@ -9,7 +9,7 @@ public:
             } else {
                 string temp = "";
 
-                while (st.top() != '(') {
+                while (st.top() != '(') { 
                     temp += st.top();
                     st.pop();
                 }
