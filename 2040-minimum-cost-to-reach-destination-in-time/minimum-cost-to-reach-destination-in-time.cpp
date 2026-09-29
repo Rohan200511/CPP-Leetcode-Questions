@@ -28,6 +28,8 @@ public:
 
             if(u == n - 1) return cost;
 
+            if(minTime[u] > currT) continue;
+
             for(auto& it : adj[u]){
                 int v = it.first;
                 int T = it.second;
