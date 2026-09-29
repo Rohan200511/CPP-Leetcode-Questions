@@ -1,40 +1,47 @@
 class Solution {
 public:
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-        vector<vector<pair<int,int>>>adj(n+1);
+        
+        unordered_map<int , vector<pair<int , int>>>adj(n);
 
-        for(auto& e : times){
-            int u = e[0];
-            int v = e[1];
-            int t = e[2];
-
-            adj[u].push_back({v , t});
+        for(auto& t : times){
+            int u = t[0];
+            int v = t[1];
+            int w = t[2];
+            adj[u].push_back({v , w});
         }
-        vector<int>time(n+1 , INT_MAX);
+
         priority_queue<pair<int , int> , vector<pair<int , int>> , greater<pair<int , int>>>pq;
 
         pq.push({0 , k});
+
+        vector<int>time(n + 1 , INT_MAX);
         time[k] = 0;
 
-        while(pq.size()){
-            auto [tme , node] = pq.top();
+        
+        while(!pq.empty()){
+            int t = pq.top().first;
+            int u = pq.top().second;
             pq.pop();
 
-            for(auto& neigh : adj[node]){
-                int t = neigh.second;
-                int adjNode = neigh.first;
+            if(t > time[u]) continue;
 
-                if(t + tme < time[adjNode]){
-                    time[adjNode] = t + tme;
-                    pq.push({t + tme , adjNode});
+            for(auto& it : adj[u]){
+                int v = it.first;
+                int w = it.second;
+
+                if(time[v] > t + w){
+                    time[v] = t + w;
+                    pq.push({t + w , v});
                 }
             }
         }
-        int ans = 0;
-        for(int i = 1; i <= n; i++) {
-            if(time[i] == INT_MAX) return -1;
-            ans = max(ans, time[i]);
+
+        int ans = -1;
+
+        for(int i = 1 ; i <= n ; i++){
+            ans = max(ans , time[i]);
         }
-        return ans;
+        return ans == INT_MAX ? -1 : ans;
     }
 };
