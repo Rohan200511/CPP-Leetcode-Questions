@@ -1,45 +1,44 @@
 class Solution {
 public:
     int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
-        vector<vector<pair<int,int>>>adj(n);
-        for(auto& e : flights){
-            int u = e[0];
-            int v = e[1];
-            int w = e[2];
+        unordered_map<int , vector<pair<int , int>>>adj(n);
 
-            adj[u].push_back({v , w});
+        for(auto& f : flights){
+            int u = f[0];
+            int v = f[1];
+            int p = f[2];
+
+            adj[u].push_back({v , p});
         }
-
-        vector<int>dist(n , INT_MAX);
-
-        queue<pair<int,int>>q;
-
-        q.push({0 , src});
-        dist[src] = 0;
 
         int stops = 0;
 
-        while(q.size() && stops <= k){
-            int N = q.size();
-            while(N--){
-                auto p = q.front();
+        queue<pair<int , int>>q;
+        q.push({0 , src});
+
+        vector<int>minP(n , 1e9);
+        minP[src] = 0;
+
+        while(!q.empty() && stops <= k){
+            int n = q.size();
+
+            while(n--){
+                int cost = q.front().first;
+                int u = q.front().second;
                 q.pop();
-                int d = p.first;
-                int node = p.second;
 
-                for(auto& v : adj[node]){
-                    int neigh = v.first;
-                    int dis = v.second;
+                for(auto& it : adj[u]){
+                    int v = it.first;
+                    int p = it.second;
 
-                    if(dis + d < dist[neigh]){
-                        dist[neigh] = dis + d;
-                        q.push({dis+d , neigh});
+                    if(minP[v] > cost + p){
+                        minP[v] = cost + p;
+                        q.push({cost + p , v});
                     }
                 }
             }
             stops++;
         }
-
-        return dist[dst] == INT_MAX ? -1 : dist[dst];
+        return minP[dst] == 1e9 ? -1 : minP[dst];
     }
 };
