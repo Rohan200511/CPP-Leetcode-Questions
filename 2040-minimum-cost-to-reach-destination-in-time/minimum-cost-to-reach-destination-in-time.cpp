@@ -1,41 +1,43 @@
 class Solution {
 public:
+
+    using T = tuple<int , int , int>;
+
     int minCost(int maxTime, vector<vector<int>>& edges, vector<int>& passingFees) {
         int n = passingFees.size();
-        vector<vector<pair<int,int>>> graph(n);
+        unordered_map<int , vector<pair<int , int>>>adj(n + 1);
 
-        for (auto& it : edges) {
-            int u = it[0];
-            int v = it[1];
-            int t = it[2];
-            graph[u].push_back({v, t});
-            graph[v].push_back({u, t});
+        for(auto& e : edges){
+            int u = e[0];
+            int v = e[1];
+            int t = e[2];
+
+            adj[u].push_back({v , t});
+            adj[v].push_back({u , t});
         }
 
-        vector<int> minTime(n, INT_MAX);
+        priority_queue<T , vector<T> , greater<T>>pq;
+        pq.push({passingFees[0] , 0 , 0});
+
+        vector<int>minTime(n , 1e9);
         minTime[0] = 0;
 
-        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
-        pq.push({passingFees[0], 0, 0}); 
+        while(!pq.empty()){
+            auto [cost , u , currT] = pq.top();
+            pq.pop();
 
-        while (!pq.empty()) {
-            auto cur = pq.top(); pq.pop();
-            int cost = cur[0], city = cur[1], timer = cur[2];
+            if(u == n - 1) return cost;
 
-            if (city == n - 1) return cost;
+            for(auto& it : adj[u]){
+                int v = it.first;
+                int T = it.second;
 
-            for (auto& p : graph[city]) {
-                int nxtCity = p.first;
-                int nxtTime = timer + p.second;
+                if(T + currT > maxTime) continue;
 
-                if (nxtTime > maxTime) continue;
-
-                if (nxtTime >= minTime[nxtCity]) continue;
-
-
-                minTime[nxtCity] = nxtTime;
-
-                pq.push({cost + passingFees[nxtCity], nxtCity, nxtTime});
+                if(minTime[v] > T + currT){
+                    minTime[v] = T + currT;
+                    pq.push({cost + passingFees[v] , v , T + currT});
+                }
             }
         }
         return -1;
