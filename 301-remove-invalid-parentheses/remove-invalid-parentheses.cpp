@@ -24,10 +24,13 @@ public:
             return;
         }
 
+        if(s[idx] == '(' || s[idx] == ')') {
+            removeParantheses(ans, s, idx + 1);
+        }
+
         ans.push_back(s[idx]);
         removeParantheses(ans, s, idx + 1);
         ans.pop_back();
-        removeParantheses(ans, s, idx + 1);
     }
 
     vector<string> removeInvalidParentheses(string s) {
