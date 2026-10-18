@@ -12,10 +12,9 @@ public:
         
         int currR = 0 , currC = 0;
 
-        set<pair<int , int>>st;
+        vector<vector<bool>>vis(n , vector<bool>(m , false));
         
-        st.insert({0 , 0});
-
+        vis[0][0] = true;
         
         while (true) {
             char ch = grid[currR][currC];
@@ -28,13 +27,13 @@ public:
             else if (ch == 'U') newR--;
             else if (ch == 'D') newR++;
 
-            if (!isValid(n, m, newR, newC) || st.count({newR, newC})) {
+            if (!isValid(n, m, newR, newC) || vis[newR][newC]) {
                 return {currR, currC};
             }
 
             currR = newR;
             currC = newC;
-            st.insert({currR, currC});
+            vis[currR][currC] = true;
         }
         return {currR , currC};
     }
