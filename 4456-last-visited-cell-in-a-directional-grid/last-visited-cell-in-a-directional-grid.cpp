@@ -12,12 +12,10 @@ public:
         
         int currR = 0 , currC = 0;
 
-        vector<vector<bool>>vis(n , vector<bool>(m , false));
-        
-        vis[0][0] = true;
         
         while (true) {
             char ch = grid[currR][currC];
+            grid[currR][currC] = '0';
 
             int newR = currR;
             int newC = currC;
@@ -27,13 +25,12 @@ public:
             else if (ch == 'U') newR--;
             else if (ch == 'D') newR++;
 
-            if (!isValid(n, m, newR, newC) || vis[newR][newC]) {
+            if (!isValid(n, m, newR, newC) || grid[newR][newC] == '0') {
                 return {currR, currC};
             }
 
             currR = newR;
             currC = newC;
-            vis[currR][currC] = true;
         }
         return {currR , currC};
     }
